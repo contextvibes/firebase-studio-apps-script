@@ -7,7 +7,6 @@
   # The 'pkgs' block defines system-level packages available in your workspace.
   packages = with pkgs; [
     # --- Core Apps Script & JS Tooling ---
-    google-clasp # The command-line tool for Apps Script.
     nodejs_20 # A recent LTS version of Node.js, which includes npm.
 
     # --- Version Control & GitHub Integration ---

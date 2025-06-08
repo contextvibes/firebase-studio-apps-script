@@ -39,7 +39,7 @@
       onCreate = {
         # Guide the user to a README file for manual setup steps.
         setup-guide = "echo '✅ Workspace created! Please see the README.md for setup instructions.'";
-        installClasp = "npx @google/clasp@3.0.6-alpha";
+        installClasp = "npx --yes @google/clasp@3.0.6-alpha";
 
         # Your custom script to install a Go-based CLI into a local ./bin directory.
         installContextVibesCli = ''
