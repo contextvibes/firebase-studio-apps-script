@@ -1,0 +1,26 @@
+{
+  "name": "Google Apps Script Kickstart for Firebase Studio",
+  "description": "A collection of Google Apps Script templates to jumpstart your development in Firebase Studio, promoting best practices for various project types.",
+  "categories": [
+    "Google Workspace",
+    "Serverless",
+    "Automation",
+    "Apps Script"
+  ],
+  "icon": "https://www.gstatic.com/images/branding/product/1x/apps_script_48dp.png",
+  "publisher": "Context Vibes",
+  "params": [
+    {
+      "id": "environment",
+      "name": "Select a Template:",
+      "type": "enum",
+      "default": "apps-script-starter-template",
+      "options": {
+        "apps-script-starter-template": "Starter Template: Minimal & bare-bones for simple scripts or learning GAS.",
+        "apps-script-module-template": "Modular Web App Template: Clean structure for Apps Script web apps with client-server interaction.",
+        "apps-script-api-connector-template": "API Connector Template: Framework for fetching data from external APIs and syncing to Google Sheets."
+      },
+      "required": true
+    }
+  ]
+}
