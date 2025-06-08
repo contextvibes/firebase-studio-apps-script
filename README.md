@@ -58,13 +58,9 @@ This collection currently offers the following templates. Choose the one that be
 ## How to Use with Firebase Studio
 
 1.  **Click the "Open in Firebase Studio" button above** (recommended).
-2.  Alternatively, in Firebase Studio:
-    *   Choose "Create a new workspace."
-    *   Select "Import a repository."
-    *   Provide the URL to this GitHub repository: `https://github.com/duizendstra/gas-template-tmp` (or your fork's URL).
-3.  Firebase Studio will detect the root `idx-template.json` and `idx-template.nix` files.
-4.  You will be prompted to **select one of the available templates** (Starter, Modular Web App, or API Connector) from a dropdown menu.
-5.  Firebase Studio will then bootstrap your new workspace by copying the selected template's entire directory (e.g., `apps-script-starter-template/`) into your workspace.
+2.  Firebase Studio will detect the root `idx-template.json` and `idx-template.nix` files.
+3.  You will be prompted to **select one of the available templates** (Starter, Modular Web App, or API Connector) from a dropdown menu.
+4.  Firebase Studio will then bootstrap your new workspace by copying the selected template's entire directory (e.g., `apps-script-starter-template/`) into your workspace.
 
 Each template comes with its own pre-configured Nix environment (`.idx/dev.nix`) providing necessary tools like `clasp`, and its own AI assistance rules (`.idx/airules.md`) tailored to its specific use case.
 
@@ -76,7 +72,7 @@ Please read our [**Contributing Guidelines (`CONTRIBUTING.md`)**](CONTRIBUTING.m
 
 ## Code of Conduct
 
-To ensure a positive and inclusive environment, we expect all contributors and participants to adhere to our [**Code of Conduct**](CODE_OF_CONDUCT.md) (we should create this file). Please familiarize yourself with its principles.
+Be kind
 
 ## Roadmap
 

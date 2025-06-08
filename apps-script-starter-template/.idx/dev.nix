@@ -53,7 +53,7 @@
         initial-setup-guide = "echo '✅ Workspace created! Please see the README.md for any further manual setup instructions.'";
 
         # Installs clasp using npx - this gets a specific version and doesn't require it in pkgs.Good.
-        install-clasp = "echo 'Installing @google/clasp globally using npx...'; npx -y @google/clasp@3.0.6-alpha"; # Added -y to npx for non-interactive
+        install-clasp = "echo 'Installing @google/clasp globally using npm...'; npm install -g @google/clasp@3.0.6-alpha"; 
 
         # Installs contextvibes CLI into a local ./bin directory.
         install-contextvibes-cli = ''
