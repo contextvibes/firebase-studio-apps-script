@@ -18,7 +18,7 @@
       "options": {
         "apps-script-starter-template": "Starter Template: Minimal & bare-bones for simple scripts or learning GAS.",
         "apps-script-module-template": "Modular Web App Template: Clean structure for Apps Script web apps with client-server interaction.",
-        "apps-script-api-connector-template": "API Connector Template: Framework for fetching data from external APIs and syncing to Google Sheets."
+        "apps-script-api-connector-template": "API Connector Template: Framework for fetching data from external APIs."
       },
       "required": true
     }

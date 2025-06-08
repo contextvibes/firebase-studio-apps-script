@@ -8,7 +8,7 @@
 
 Supercharge your Google Apps Script (GAS) development with this curated collection of starter templates, meticulously designed for seamless integration with **Firebase Studio (Project IDX)**. Whether you're a beginner taking your first steps in GAS or an experienced developer building sophisticated automations, this collection provides well-structured, best-practice foundations to accelerate your projects.
 
-<a href="https://studio.firebase.google.com/new?template=https%3A%2F%2Fgithub.com%2Fduizendstra%2Fgas-template-tmp">
+<a href="https://studio.firebase.google.com/new?template=https://github.com/contextvibes/firebase-studio-apps-script">
   <picture>
     <source
       media="(prefers-color-scheme: dark)"

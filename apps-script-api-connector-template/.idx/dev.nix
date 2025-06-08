@@ -7,7 +7,6 @@
   # The 'pkgs' block defines system-level packages available in your workspace.
   packages = with pkgs; [
     # --- Core Apps Script & JS Tooling ---
-    google-clasp # The command-line tool for Apps Script.
     nodejs_20 # A recent LTS version of Node.js, which includes npm.
 
     # --- Version Control & GitHub Integration ---
@@ -38,21 +37,9 @@
     workspace = {
       # Runs only once when the workspace is first created.
       onCreate = {
-        # --- NEW: Install Node packages using npm ---
-        # This creates a package.json and installs the types for autocompletion.
-        # This is more reliable than depending on a Nix package that may not exist.
-        setup-npm = ''
-          echo "Initializing Node.js project and installing packages..."
-          # Create a basic package.json if it doesn't exist
-          if [ ! -f package.json ]; then
-            npm init -y
-          fi
-          # Install the types package for Google Apps Script autocompletion
-          npm install --save-dev @types/google-apps-script
-        '';
-
         # Guide the user to a README file for manual setup steps.
         setup-guide = "echo '✅ Workspace created! Please see the README.md for setup instructions.'";
+        installClasp = "npx @google/clasp@3.0.6-alpha";
 
         # Your custom script to install a Go-based CLI into a local ./bin directory.
         installContextVibesCli = ''
