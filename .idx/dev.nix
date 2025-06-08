@@ -1,70 +1,88 @@
-# IDX environment configuration for Google Apps Script Development using clasp
+# IDX environment configuration for Google Apps Script (GAS) Development
+# using clasp and JavaScript.
 { pkgs, ... }: {
+  # Pin to a specific Nixpkgs channel for reproducibility.
   channel = "stable-25.05";
 
-    packages = with pkgs; [
-    # --- Core Development & Workflow ---
-    go
-    google-clasp
-    nodejs
+  # The 'pkgs' block defines system-level packages available in your workspace.
+  packages = with pkgs; [
+    # --- Core Apps Script & JS Tooling ---
+    google-clasp # The command-line tool for Apps Script.
+    nodejs_20 # A recent LTS version of Node.js, which includes npm.
 
-    git
-    
-    # --- Utilities --
-    gh
-    tree # Directory structure viewer
-    nodePackages.markdownlint-cli
+    # --- Version Control & GitHub Integration ---
+    git # Essential for version control.
+    gh # The official GitHub CLI.
+
+    # --- Utilities ---
+    go # Required by the custom `contextvibes` installation script.
+    tree # Useful for viewing directory structures.
   ];
-  
 
-
-  # Configure environment
+  # The 'env' block sets environment variables for the entire workspace.
   env = { };
 
-  # IDX specific settings
+  # IDX-specific settings
   idx = {
+    # VS Code extensions that will be automatically installed.
     extensions = [
       "dbaeumer.vscode-eslint"
       "esbenp.prettier-vscode"
+      "dev-tools-for-apps-script.vscode-clasp"
       "GitHub.vscode-pull-request-github"
     ];
+
     previews = { enable = false; };
 
+    # Workspace lifecycle hooks
     workspace = {
+      # Runs only once when the workspace is first created.
       onCreate = {
-        # Guide the user to the SETUP file first
-        setup-reminder = "echo 'Workspace created. Start the setup using the Gemini chat'";
-        installContextVibesCli = ''
-          echo "Attempting to install contextvibes CLI into ./bin ..."
-
-          if ! command -v go &> /dev/null
-          then
-              echo "Go command could not be found, skipping contextvibes installation."
-              # Exit gracefully or 'exit 1' if critical
-              # For now, we'll assume Go is present due to pkgs.go
-          else
-            LOCAL_BIN_DIR="$(pwd)/bin"
-            mkdir -p "$LOCAL_BIN_DIR"
-            echo "Target directory for contextvibes: $LOCAL_BIN_DIR"
-
-            export GOBIN="$LOCAL_BIN_DIR"
-            echo "Running: GOBIN=$GOBIN go install github.com/contextvibes/cli/cmd/contextvibes@latest"
-
-            if go install github.com/contextvibes/cli/cmd/contextvibes@latest; then
-              echo "Successfully installed contextvibes to $LOCAL_BIN_DIR/contextvibes"
-              echo "You can run it using: $LOCAL_BIN_DIR/contextvibes"
-              echo "Consider adding '$LOCAL_BIN_DIR' to your PATH for convenience (see README)."
-              chmod +x "$LOCAL_BIN_DIR/contextvibes" || echo "Note: chmod +x on contextvibes failed."
-            else
-              echo "ERROR: Failed to install contextvibes."
-            fi
-            unset GOBIN
+        # --- NEW: Install Node packages using npm ---
+        # This creates a package.json and installs the types for autocompletion.
+        # This is more reliable than depending on a Nix package that may not exist.
+        setup-npm = ''
+          echo "Initializing Node.js project and installing packages..."
+          # Create a basic package.json if it doesn't exist
+          if [ ! -f package.json ]; then
+            npm init -y
           fi
+          # Install the types package for Google Apps Script autocompletion
+          npm install --save-dev @types/google-apps-script
+        '';
+
+        # Guide the user to a README file for manual setup steps.
+        setup-guide = "echo '✅ Workspace created! Please see the README.md for setup instructions.'";
+
+        # Your custom script to install a Go-based CLI into a local ./bin directory.
+        installContextVibesCli = ''
+          echo "Installing contextvibes CLI into ./bin..."
+          LOCAL_BIN_DIR="$(pwd)/bin"
+          mkdir -p "$LOCAL_BIN_DIR"
+          export GOBIN="$LOCAL_BIN_DIR"
+          if go install github.com/contextvibes/cli/cmd/contextvibes@latest; then
+            echo "✅ Successfully installed contextvibes to $LOCAL_BIN_DIR"
+          else
+            echo "❌ ERROR: Failed to install contextvibes."
+          fi
+          unset GOBIN
         '';
       };
 
-      # Runs every time the workspace starts
-      onStart = { };
+      # Runs every time the workspace starts.
+      onStart = {
+        # Welcome message and version checks for quick diagnostics.
+        welcome = "echo '👋 Welcome back! Checking tool versions...'; node --version; clasp --version;";
+
+        # Add the local ./bin directory (if it exists) to the PATH.
+        add-local-bin-to-path = ''
+          LOCAL_BIN_DIR="$(pwd)/bin"
+          if [ -d "$LOCAL_BIN_DIR" ]; then
+            export PATH="$LOCAL_BIN_DIR:$PATH"
+            echo "✔️  Local ./bin directory added to PATH."
+          fi
+        '';
+      };
     };
   };
 }

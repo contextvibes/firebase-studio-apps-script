@@ -1,5 +1,5 @@
 # Root idx-template.nix for multi-variant Go templates
-{ pkgs, environment ? "apps-script-module-template", ... }: {
+{ pkgs, environment ? "apps-script-starter-template", ... }: {
   packages = [ pkgs.bash ];
 
   bootstrap = ''
