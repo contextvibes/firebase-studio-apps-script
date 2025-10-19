@@ -1,87 +1,91 @@
-# IDX environment configuration for Google Apps Script (GAS) Development
-# using clasp and JavaScript.
-{ pkgs, ... }: {
-  # Pin to a specific Nixpkgs channel for reproducibility.
-  channel = "stable-25.05";
+# .idx/dev.nix
+#
+# This file declaratively defines the complete, reproducible development
+# environment for this project using Nix, tailored for Project IDX.
+# It ensures that all developers and CI/CD systems use the exact same tools.
+#
+# For more information, see the IDX documentation:
+# https://firebase.google.com/docs/studio/devnix-reference
 
-  # The 'pkgs' block defines system-level packages available in your workspace.
-  packages = with pkgs; [
-    # --- Core Apps Script & JS Tooling ---
-    nodejs_20 # A recent LTS version of Node.js, which includes npm.
+{ pkgs, ... }:
 
-    # --- Version Control & GitHub Integration ---
-    git # Essential for version control.
-    gh # The official GitHub CLI.
+let
+  # Import a custom Nix derivation for our project-specific CLI tool.
+  # This idiomatic Nix approach builds the tool as a reproducible package,
+  # which is more robust than using an imperative install script.
+  contextvibes = import ./contextvibes.nix { pkgs = pkgs; };
+in
+{
+  # -----------------------------------------------------------------------------
+  # NIXPKGS CHANNEL
+  # -----------------------------------------------------------------------------
+  # Pin to a specific stable Nixpkgs channel. This is the most critical
+  # part of ensuring reproducibility. It guarantees that all enumerated packages
+  # are installed at the exact same versions for every user of this environment.
+  channel = "stable-25.05"; # For the latest, see https://nixos.org/channels/
 
-    # --- Utilities ---
-    go # Required by the custom `contextvibes` installation script.
-    tree # Useful for viewing directory structures.
+  # -----------------------------------------------------------------------------
+  # ENVIRONMENT PACKAGES
+  # -----------------------------------------------------------------------------
+  # System-level packages available in the workspace terminal.
+  # Packages are found on the Nix Package Search: https://search.nixos.org/packages
+  packages = [
+    # --- Code Quality & Formatting ---
+    pkgs.nodejs_22 # Required by markdownlint-cli.
+
+    # --- Version Control & CLI Utilities ---
+    pkgs.file # Determines file types.
+    pkgs.git  # The industry-standard distributed version control system.
+    pkgs.jq   # A command-line processor for JSON, essential for scripting.
+    pkgs.tree # Displays directory structures in a tree-like format.
+
+    # --- Project-Specific Tooling ---
+    contextvibes # The custom 'contextvibes' CLI tool built from ./contextvibes.nix.
   ];
 
-  # The 'env' block sets environment variables for the entire workspace.
+  # -----------------------------------------------------------------------------
+  # ENVIRONMENT VARIABLES
+  # -----------------------------------------------------------------------------
+  # Global environment variables for the workspace.
   env = { };
 
-  # IDX-specific settings
+  # -----------------------------------------------------------------------------
+  # PROJECT IDX CONFIGURATION
+  # -----------------------------------------------------------------------------
+  # This section configures Project IDX-specific features.
   idx = {
-    # VS Code extensions that will be automatically installed.
+    # VS Code extensions to install from the Open VSX Registry.
+    # Find extensions at: https://open-vsx.org/
     extensions = [
-      "dbaeumer.vscode-eslint"
-      "esbenp.prettier-vscode"
-      "dev-tools-for-apps-script.vscode-clasp"
-      "GitHub.vscode-pull-request-github"
+      # --- Version Control ---
+      "GitHub.vscode-pull-request-github" # Integrates GitHub pull requests and issues.
+
+      # --- Linters & Formatters ---
+      "dbaeumer.vscode-eslint"   # Integrates ESLint into VS Code.
+      "esbenp.prettier-vscode" # Provides Prettier code formatting.
     ];
 
-    previews = { enable = false; };
-
-    # Workspace lifecycle hooks
     workspace = {
-      # Runs only once when the workspace is first created.
-      onCreate = {
-        # --- NEW: Install Node packages using npm ---
-        # This creates a package.json and installs the types for autocompletion.
-        # This is more reliable than depending on a Nix package that may not exist.
-        setup-npm = ''
-          echo "Initializing Node.js project and installing packages..."
-          # Create a basic package.json if it doesn't exist
-          if [ ! -f package.json ]; then
-            npm init -y
-          fi
-          # Install the types package for Google Apps Script autocompletion
-          npm install --save-dev @types/google-apps-script
-        '';
+      # Runs ONCE when the workspace is first created.
+      onCreate = { };
 
-        # Guide the user to a README file for manual setup steps.
-        setup-guide = "echo '✅ Workspace created! Please see the README.md for setup instructions.'";
-
-        # Your custom script to install a Go-based CLI into a local ./bin directory.
-        installContextVibesCli = ''
-          echo "Installing contextvibes CLI into ./bin..."
-          LOCAL_BIN_DIR="$(pwd)/bin"
-          mkdir -p "$LOCAL_BIN_DIR"
-          export GOBIN="$LOCAL_BIN_DIR"
-          if go install github.com/contextvibes/cli/cmd/contextvibes@latest; then
-            echo "✅ Successfully installed contextvibes to $LOCAL_BIN_DIR"
-          else
-            echo "❌ ERROR: Failed to install contextvibes."
-          fi
-          unset GOBIN
-        '';
-      };
-
-      # Runs every time the workspace starts.
+      # Runs EVERY time the workspace starts.
       onStart = {
-        # Welcome message and version checks for quick diagnostics.
-        welcome = "echo '👋 Welcome back! Checking tool versions...'; node --version; clasp --version;";
-
-        # Add the local ./bin directory (if it exists) to the PATH.
-        add-local-bin-to-path = ''
-          LOCAL_BIN_DIR="$(pwd)/bin"
-          if [ -d "$LOCAL_BIN_DIR" ]; then
-            export PATH="$LOCAL_BIN_DIR:$PATH"
-            echo "✔️  Local ./bin directory added to PATH."
+        # Ensure a convenient 'clasp' alias is available in the shell.
+        # This script idempotently adds the alias to ~/.bash_aliases.
+        add-clasp-alias = ''
+          if ! grep -q "alias clasp=" ~/.bash_aliases 2>/dev/null; then
+            echo 'alias clasp="npx @google/clasp"' >> ~/.bash_aliases
+            echo "✅ Added 'clasp' alias. Please open a new terminal to use it."
           fi
         '';
       };
+    };
+
+    # This project is a library and backend service, so the IDX web preview
+    # feature is not needed.
+    previews = {
+      enable = false;
     };
   };
 }

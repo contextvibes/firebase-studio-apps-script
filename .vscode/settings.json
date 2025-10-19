@@ -1,36 +1,87 @@
 {
+  // ---------------------------------------------------------------------------
+  // Project IDX AI Features
+  // ---------------------------------------------------------------------------
   "IDX.aI.enableInlineCompletion": true,
   "IDX.aI.enableCodebaseIndexing": true,
-  "terminal.integrated.localEchoLatencyThreshold": -1,
-  "terminal.integrated.localEchoEnabled": "off",
-  "terminal.integrated.fontSize": 13,
+
+  // ---------------------------------------------------------------------------
+  // Workbench UI & Behavior (Suggested User Preferences)
+  // These settings provide a streamlined UI but can be customized by users.
+  // ---------------------------------------------------------------------------
   "workbench.startupEditor": "none",
-  "editor.fontFamily": "JetBrains Mono, Menlo, Monaco, Courier New, monospace",
-  "editor.fontWeight": "normal",
-  "editor.fontSize": 13,
-  "editor.lineHeight": 1.5,
-  "editor.letterSpacing": 0,
-  "debug.console.fontSize": 13,
-  "window.commandCenter": false,
-  "window.autoDetectColorScheme": true,
-  "inlineChat.mode": "preview",
-
-  "git.enableSmartCommit": true,
-  "git.autofetch": true,
-
-  "editor.wordWrap": "on",
-
-  "files.watcherExclude": {
-      "**/.cache/**": true,
-      "**/.git/**": true,
-      "**/node_modules/**": true
-  },
-  "go.useLanguageServer": true,
-
-  "workbench.activityBar.location": "top",
-  "workbench.colorTheme": "Monokai",
-  "workbench.iconTheme": "vs-seti",
   "workbench.layoutControl.enabled": false,
+  "window.commandCenter": false,
+  "workbench.activityBar.location": "top",
+  "workbench.iconTheme": "monospace",
   "workbench.preferredDarkColorTheme": "Tomorrow Night Blue",
   "workbench.preferredLightColorTheme": "Monospace Light",
+  "window.autoDetectColorScheme": true,
+
+  // ---------------------------------------------------------------------------
+  // Editor: Font & Display (Suggested User Preferences)
+  // ---------------------------------------------------------------------------
+  "editor.fontFamily": "JetBrains Mono, Menlo, Monaco, Courier New, monospace",
+  "editor.fontSize": 13,
+  "editor.fontWeight": "normal",
+  "editor.lineHeight": 1.5,
+  "editor.letterSpacing": 0,
+  "editor.renderWhitespace": "boundary",
+  "editor.guides.highlightActiveIndentation": true,
+
+  // ---------------------------------------------------------------------------
+  // Editor: Code Style & Formatting (Project-Enforced)
+  // These settings are critical for maintaining a consistent codebase.
+  // ---------------------------------------------------------------------------
+  "editor.wordWrap": "on",
+  "editor.formatOnSave": true,         // IMPORTANT: Ensures all code is formatted automatically.
+  "files.trimTrailingWhitespace": true,  // Prevents unnecessary whitespace.
+  "files.insertFinalNewline": true,    // Follows POSIX standards for file termination.
+
+  // ---------------------------------------------------------------------------
+  // File Explorer & Search
+  // Excludes generated artifacts and irrelevant metadata for a cleaner workspace.
+  // ---------------------------------------------------------------------------
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/bower_components": true,
+    "**/dist": true,
+    "**/build": true
+  },
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/Thumbs.db": true
+  },
+
+  // ---------------------------------------------------------------------------
+  // Terminal & Debug Console (Suggested User Preferences)
+  // ---------------------------------------------------------------------------
+  "terminal.integrated.fontSize": 13,
+  "terminal.integrated.localEchoEnabled": "off",
+  "terminal.integrated.localEchoLatencyThreshold": -1,
+  "debug.console.fontSize": 13,
+
+  // ---------------------------------------------------------------------------
+  // Version Control (Git)
+  // Sensible defaults to streamline a Git-based workflow.
+  // ---------------------------------------------------------------------------
+  "git.autofetch": true,
+  "git.enableSmartCommit": true,
+  "git.confirmSync": false,
+  "git.useEditorAsCommitInput": true,
+  "diffEditor.ignoreTrimWhitespace": true,
+
+  // ---------------------------------------------------------------------------
+  // File & Language Associations
+  // Ensures files are correctly identified for syntax highlighting and tooling.
+  // ---------------------------------------------------------------------------
+  "files.associations": {
+    "*.env": "properties",
+    "*.env.*": "properties",
+    ".env.example": "properties"
+  }
 }

@@ -3,9 +3,8 @@ logs
 *.log
 *.log.*
 
-# ContextVibes CLI executable
-bin/contextvibes
-contextvibes*
+contextvibes.md
+
 
 # Optional: VSCode user settings (if you prefer not to share)
 # /.vscode/settings.json
